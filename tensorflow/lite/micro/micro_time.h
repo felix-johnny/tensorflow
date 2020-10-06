@@ -25,6 +25,8 @@ int32_t ticks_per_second();
 
 // Return time in ticks.  The meaning of a tick varies per platform.
 int32_t GetCurrentTimeTicks();
+void InitTimer();
+void StartTimer();
 
 }  // namespace tflite
 

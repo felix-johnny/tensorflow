@@ -14,6 +14,13 @@ $(MAKEFILE_DIR)/downloads/person_model_grayscale/person_image_data.cc
 PERSON_DETECTION_BENCHMARK_HDRS := \
 tensorflow/lite/micro/examples/person_detection/person_detect_model_data.h
 
+THIRD_PARTY_CC_HDRS += \
+tensorflow/lite/micro/benchmarks/micro_benchmark.h \
+tensorflow/lite/micro/examples/person_detection_experimental/model_settings.h \
+tensorflow/lite/micro/examples/person_detection_experimental/no_person_image_data.h \
+tensorflow/lite/micro/examples/person_detection_experimental/person_image_data.h \
+tensorflow/lite/micro/examples/person_detection_experimental/person_detect_model_data.h
+
 PERSON_DETECTION_EXPERIMENTAL_BENCHMARK_SRCS := \
 tensorflow/lite/micro/benchmarks/person_detection_experimental_benchmark.cc \
 $(MAKEFILE_DIR)/downloads/person_model_int8/no_person_image_data.cc \
