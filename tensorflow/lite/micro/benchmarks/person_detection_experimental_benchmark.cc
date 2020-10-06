@@ -76,6 +76,7 @@ void PersonDetectionTenIerationsWithPerson() {
 void PersonDetectionTenIerationsWithoutPerson() {
   benchmark_runner->SetInput(reinterpret_cast<const int8_t*>(g_no_person_data));
   for (int i = 0; i < 10; i++) {
+    (void)0;
     benchmark_runner->RunSingleIteration();
   }
 }
@@ -86,7 +87,5 @@ TF_LITE_MICRO_BENCHMARKS_BEGIN
 
 TF_LITE_MICRO_BENCHMARK(InitializeBenchmarkRunner());
 TF_LITE_MICRO_BENCHMARK(benchmark_runner->RunSingleIteration());
-TF_LITE_MICRO_BENCHMARK(PersonDetectionTenIerationsWithPerson());
-TF_LITE_MICRO_BENCHMARK(PersonDetectionTenIerationsWithoutPerson());
 
 TF_LITE_MICRO_BENCHMARKS_END

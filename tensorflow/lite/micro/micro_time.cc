@@ -27,18 +27,44 @@ limitations under the License.
 
 #include "tensorflow/lite/micro/micro_time.h"
 
+#define DWT_CONTROL             (*((volatile uint32_t*)0xE0001000))
+/*!< DWT Control register */
+#define DWT_CYCCNTENA_BIT       (1UL<<0)
+/*!< CYCCNTENA bit in DWT_CONTROL register */
+#define DWT_CYCCNT              (*((volatile uint32_t*)0xE0001004))
+/*!< DWT Cycle Counter register */
+#define DEMCR                   (*((volatile uint32_t*)0xE000EDFC))
+#define LAR                   (*((volatile uint32_t*)0xE0001FB0))
+/*!< DEMCR: Debug Exception and Monitor Control Register */
+#define TRCENA_BIT              (1UL<<24)
+/*!< Trace enable bit in DEMCR register */
+
 namespace tflite {
 
-// Reference implementation of the ticks_per_second() function that's required
-// for a platform to support Tensorflow Lite for Microcontrollers profiling.
-// This returns 0 by default because timing is an optional feature that builds
-// without errors on platforms that do not need it.
-int32_t ticks_per_second() { return 0; }
+constexpr int kClocksPerSecond = 216e6;
 
-// Reference implementation of the GetCurrentTimeTicks() function that's
-// required for a platform to support Tensorflow Lite for Microcontrollers
-// profiling. This returns 0 by default because timing is an optional feature
-// that builds without errors on platforms that do not need it.
-int32_t GetCurrentTimeTicks() { return 0; }
+  // Reference implementation of the ticks_per_second() function that's required
+  // for a platform to support Tensorflow Lite for Microcontrollers profiling.
+  // This returns 0 by default because timing is an optional feature that builds
+  // without errors on platforms that do not need it.Z
+  int32_t ticks_per_second() { return kClocksPerSecond; }
+  // Reference implementation of the GetCurrentTimeTicks() function that's
+  // required for a platform to support Tensorflow Lite for Microcontrollers
+  // profiling. This returns 0 by default because timing is an optional feature
+  // that builds without errors on platforms that do not need it.
+  int32_t GetCurrentTimeTicks() {
+      return DWT_CYCCNT;
+  }
+
+  void StartTimer() {
+      DWT_CYCCNT = 0;
+  }
+
+  void InitTimer() {
+    DEMCR |= TRCENA_BIT;
+    LAR = 0xC5ACCE55;
+    DWT_CONTROL |= DWT_CYCCNTENA_BIT;
+    DWT_CYCCNT = 0;
+  }
 
 }  // namespace tflite

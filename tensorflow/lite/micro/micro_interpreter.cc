@@ -266,7 +266,7 @@ TfLiteStatus MicroInterpreter::Invoke() {
 
     if (registration->invoke) {
       TfLiteStatus invoke_status;
-#ifndef NDEBUG  // Omit profiler overhead from release builds.
+#if 1//ndef NDEBUG  // Omit profiler overhead from release builds.
       // The case where profiler == nullptr is handled by
       // ScopedOperatorProfile.
       tflite::Profiler* profiler =
